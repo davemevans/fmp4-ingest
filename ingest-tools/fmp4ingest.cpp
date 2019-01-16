@@ -55,14 +55,14 @@ int main(int argc, char *argv[])
 		  CURL *curl;
 		  CURLcode res;
 		  curl = curl_easy_init();
+		  curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
 		  
 		  // post the init segment using curl
 		  if (curl)
 		  {
-			  char empty_post[1] = "";
 			  curl_easy_setopt(curl, CURLOPT_URL, argv[2]);
-			  //curl_easy_setopt(curl, CURLOPT_POSTFIELDS, (char *)&empty_post[0]);
-			  //curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)0L);
+			  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, NULL);
+			  curl_easy_setopt(curl, CURLOPT_POSTFIELDSIZE, (long)0L);
 
 			  /* Perform the request, res will get the return code */
 			  res = curl_easy_perform(curl);

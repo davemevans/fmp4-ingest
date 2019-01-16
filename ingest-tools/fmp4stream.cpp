@@ -934,7 +934,7 @@ void media_fragment::print()
 }
 
 // parse an fmp4 file for media ingest
-int ingest_stream::load_from_file(istream *infile)
+int ingest_stream::load_from_file(istream *infile, bool silent)
 {
 	try
 	{
@@ -982,7 +982,7 @@ int ingest_stream::load_from_file(istream *infile)
 					{
 						m.m_emsg.parse((char *)& prev_box->m_box_data[0], prev_box->m_box_data.size());
 						//cout << "|emsg|";
-						cout << "found inband dash emsg box" << std::endl;
+						if (!silent) cout << "found inband dash emsg box" << std::endl;
 					}
 					//cout << "|moof|";
 					while (!mdat_found)
@@ -1022,19 +1022,22 @@ int ingest_stream::load_from_file(istream *infile)
 				if (it->m_btype.compare("sidx") == 0)
 				{
 					this->m_sidx_box = *it;
-					cout << "|sidx|";
+					//cout << "|sidx|";
 				}
 				if (it->m_btype.compare("meta") == 0)
 				{
 					this->m_meta_box = *it;
-					cout << "|meta|";
+					//cout << "|meta|";
 				}
 			}
 		}
-		cout << endl;
-		cout << "***  finished reading fmp4 fragments  ***" << endl;
-		cout << "***  read  fmp4 init fragment         ***" << endl;
-		cout << "***  read " << m_media_fragment.size() << " fmp4 media fragments ***" << endl;
+
+		if (!silent) {
+			cout << endl;
+			cout << "***  finished reading fmp4 fragments  ***" << endl;
+			cout << "***  read  fmp4 init fragment         ***" << endl;
+			cout << "***  read " << m_media_fragment.size() << " fmp4 media fragments ***" << endl;
+		}
 
 		return 1;
 	}
@@ -1296,5 +1299,14 @@ void ingest_stream::print()
 	for (auto it = m_media_fragment.begin(); it != m_media_fragment.end(); ++it)
 	{
 		it->print();
+	}
+}
+
+//! dump the contents of the sparse track to screen
+void ingest_stream::print_mdat_sizes()
+{
+	for (auto it = m_media_fragment.begin(); it != m_media_fragment.end(); ++it)
+	{
+		cout << it->m_mdat_box.m_size << endl;
 	}
 }

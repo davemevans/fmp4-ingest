@@ -307,13 +307,14 @@ namespace fMP4Stream {
 		init_fragment m_init_fragment;
 		vector<media_fragment> m_media_fragment;
 		box m_sidx_box, m_meta_box, m_mfra_box;
-		int load_from_file(istream *input_file);
+		int load_from_file(istream *input_file, bool silent = false);
 		int write_init_to_file(string &out_file);
 		int write_to_sparse_emsg_file(string &out_file, uint32_t track_id, uint32_t announce, string &urn);
 		uint64_t get_init_segment_data(vector<uint8_t> &init_seg_dat);
 		uint64_t get_media_segment_data(long index, vector<uint8_t> &media_seg_dat);
 		void write_to_dash_event_stream(string &out_file);
 		void print();
+		void print_mdat_sizes();
 	};
 
 	//------------------ helpers for processing the bitstream ------------------------
